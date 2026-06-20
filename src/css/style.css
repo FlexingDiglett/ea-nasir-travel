@@ -1,0 +1,207 @@
+:root {
+    --travel-blue: #0A2540;
+    --fine-copper: #887333;
+    --copper-hover: #9C6029;
+    --pure-white: #FFFFFF;
+    --bg-light: #F8F9FA;
+    --bg-copper: #887333;
+}
+
+/* BASE AND TYPHOGRAPHY */
+
+body {
+    background-color: var(--bg-light);
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.text-travel-blue { color: var(--travel-blue) !important; }
+.text-copper { color: var(--fine-copper) !important; }
+.bg-copper { background-color: var(--bg-copper) !important; }
+
+/* BUTTONS */
+
+.btn-copper {
+    background-color: var(--fine-copper);
+    color: var(--pure-white);
+    font-weight: 600;
+    border: none;
+    transition: background-color 0.2s ease;
+}
+
+.btn-copper:hover {
+    background-color: var(--copper-hover);
+    color: var(--pure-white);
+}
+
+.btn-fw-semibold { font-weight: 600; }
+
+.btn-login-fixed {
+    min-width: 160px;
+    text-align: center;
+}
+
+/* NAVBAR & HEADER */
+
+.navbar-custom {
+    background-color: var(--travel-blue);
+}
+
+.navbar-custom .nav-link {
+    color: var(--pure-white) !important;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+
+.navbar-custom .nav-link:hover {
+    opacity: 1;
+}
+
+.ea-nasir-logo {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: var(--pure-white);
+    border: 2px solid var(--fine-copper);
+    color: var(--fine-copper) !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.ea-nasir-logo:hover {
+    background-color: var(--fine-copper);
+    color: var(--pure-white) !important;
+}
+
+.dropdown-menu {
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+@media (min-width: 992px) {
+    .navbar-nav .nav-item {
+        min-width: 160px;
+        text-align: center;
+    }
+
+    .nav-divider {
+        position: relative;
+    }
+    
+    .nav-divider::after {
+        content: "";
+        position: absolute;
+        top: 25%;
+        right: 0;
+        height: 50%;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* INDEX & FLIGHT SEARCH */
+
+.hero-banner {
+    min-height: 35vh;
+    background-color: var(--travel-blue);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.hero-icon {
+    font-size: 5rem;
+    color: var(--fine-copper);
+}
+
+.trending-card {
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.trending-img {
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.card:hover .trending-img,
+.trending-card:hover .trending-img {
+    transform: scale(1.05);
+}
+
+.autocomplete-dropdown {
+    z-index: 1000;
+    display: none;
+}
+
+.results {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.transition-hover {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    border: 1px solid transparent !important;
+}
+
+.transition-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1) !important;
+    border-color: var(--fine-copper) !important;
+}
+
+/* USER PROFILE */
+
+.profile-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.profile-banner {
+    background-color: var(--travel-blue);
+    min-height: 140px;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.profile-initials {
+    font-weight: 800;
+    margin: 0;
+}
+
+.profile-name { font-weight: 700; }
+.profile-badge { font-size: 0.9rem; }
+.profile-label { letter-spacing: 1px; }
+
+.profile-stat-box {
+    background-color: var(--bg-light);
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.2s ease;
+}
+
+.profile-stat-box:hover {
+    transform: translateY(-2px);
+}
+
+/* TRENDING DESTINATIONS */
+
+.trending-destination-card { 
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+}
+
+.trending-destination-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}

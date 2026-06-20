@@ -1,0 +1,11 @@
+{
+    "require": {
+        "mongodb/mongodb": "^2.3",
+        "laudis/neo4j-php-client": "^3.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
+}

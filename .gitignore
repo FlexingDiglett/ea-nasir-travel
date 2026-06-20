@@ -1,0 +1,4 @@
+neo4j_data/
+mongo_data/
+.env
+vendor/
