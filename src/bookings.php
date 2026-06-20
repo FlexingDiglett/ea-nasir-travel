@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->delete([
             '_id' => new MongoDB\BSON\ObjectId($ticketId),
-            'user_id' => (int)$userId
+            'user_id' => ['$in' => [(int)$userId, (string)$userId]]
         ]);
 
         $deleteResult = $manager->executeBulkWrite('travel_app.tickets', $bulk);
@@ -44,8 +44,12 @@ $pastTickets = [];
 
 if (empty($errorMessage)) {
     try {
+        $filter = [
+            'user_id' => ['$in' => [(int)$userId, (string)$userId]]
+        ];
+        
         $query = new MongoDB\Driver\Query(
-            ['user_id' => (int)$userId],
+            $filter,
             ['sort' => ['created_at' => -1]]
         );
         
