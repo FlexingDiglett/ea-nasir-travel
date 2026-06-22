@@ -8,8 +8,6 @@ class User {
             session_start();
         }
 
-        // connects to the db-sql Docker container, and (thanks to @) throws a clean error instead of crashing with a PHP error text
-
         $this->db = @new mysqli('db-sql', 'root', 'password', 'travel_app');
 
         if ($this->db->connect_error) {

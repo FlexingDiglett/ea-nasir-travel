@@ -14,7 +14,6 @@ class Neo4jTracker {
             ->build();
     }
 
-    // --- UPDATED: Now accepts the City Name and saves it to the node ---
     public function trackSearch($iataCode, $cityName = 'Unknown') {
         try {
             $query = '
