@@ -87,6 +87,14 @@ function selectTrending(cityName, iataCode) {
     if (destInput && destCode) {
         destInput.value = cityName + ' (' + iataCode + ')';
         destCode.value = iataCode;
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        destInput.style.transition = 'background-color 0.3s ease';
+        destInput.style.backgroundColor = '#e6f7ff';
+        setTimeout(() => {
+            destInput.style.backgroundColor = '';
+        }, 500);
     }
 }
 

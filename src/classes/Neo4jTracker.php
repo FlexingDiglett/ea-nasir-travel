@@ -14,15 +14,20 @@ class Neo4jTracker {
             ->build();
     }
 
-    public function trackSearch($iataCode) {
+    // --- UPDATED: Now accepts the City Name and saves it to the node ---
+    public function trackSearch($iataCode, $cityName = 'Unknown') {
         try {
             $query = '
                 MERGE (a:Airport {iata_code: $iata})
+                SET a.city_name = $city_name
                 CREATE (s:SearchEvent {timestamp: datetime()})
                 CREATE (s)-[:SEARCHED_FOR]->(a)
             ';
             
-            $this->client->run($query, ['iata' => $iataCode]);
+            $this->client->run($query, [
+                'iata' => $iataCode,
+                'city_name' => $cityName
+            ]);
             
         } catch (Exception $e) {
             error_log("Neo4j Tracking Failed: " . $e->getMessage());

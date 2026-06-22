@@ -22,10 +22,35 @@ require_once 'includes/header.php';
 
 $isRoundTrip = (isset($_GET['trip_type']) && $_GET['trip_type'] === 'round_trip');
 
+$originDisplay = isset($_GET['origin']) ? htmlspecialchars($_GET['origin']) : '';
+$destDisplay = isset($_GET['destination']) ? htmlspecialchars($_GET['destination']) : '';
+$destCityName = 'Unknown';
+
+if ($pdo) {
+    if (!empty($_GET['origin'])) {
+        $stmt = $pdo->prepare("SELECT city_name, iata_code FROM airports WHERE iata_code = ?");
+        $stmt->execute([$_GET['origin']]);
+        $airport = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($airport) {
+            $originDisplay = htmlspecialchars($airport['city_name'] . ' (' . $airport['iata_code'] . ')');
+        }
+    }
+    
+    if (!empty($_GET['destination'])) {
+        $stmt = $pdo->prepare("SELECT city_name, iata_code FROM airports WHERE iata_code = ?");
+        $stmt->execute([$_GET['destination']]);
+        $airport = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($airport) {
+            $destDisplay = htmlspecialchars($airport['city_name'] . ' (' . $airport['iata_code'] . ')');
+            $destCityName = $airport['city_name'];
+        }
+    }
+}
+
 if (isset($_GET['destination']) && !empty($_GET['destination'])) {
     require_once __DIR__ . '/classes/Neo4jTracker.php';
     $tracker = new Neo4jTracker();
-    $tracker->trackSearch($_GET['destination']);
+    $tracker->trackSearch($_GET['destination'], $destCityName);
 }
 ?>
 
@@ -63,14 +88,14 @@ if (isset($_GET['destination']) && !empty($_GET['destination'])) {
 
                     <div class="col-md-3 position-relative">
                         <label class="form-label text-muted fw-bold"><?php echo $translator->get('origin'); ?></label>
-                        <input type="text" id="origin_input" class="form-control form-control-lg" placeholder="<?php echo $translator->get('ph_origin'); ?>" value="<?php echo isset($_GET['origin']) ? htmlspecialchars($_GET['origin']) : ''; ?>" onkeyup="searchPlaces(this.value, 'origin_results', 'origin_code')" autocomplete="off" required>
+                        <input type="text" id="origin_input" class="form-control form-control-lg" placeholder="<?php echo $translator->get('ph_origin'); ?>" value="<?php echo $originDisplay; ?>" onkeyup="searchPlaces(this.value, 'origin_results', 'origin_code')" autocomplete="off" required>
                         <input type="hidden" name="origin" id="origin_code" value="<?php echo isset($_GET['origin']) ? htmlspecialchars($_GET['origin']) : ''; ?>">
                         <div id="origin_results" class="autocomplete-results position-absolute w-100 bg-white shadow-sm border rounded mt-1" style="z-index: 1050; display: none; max-height: 250px; overflow-y: auto;"></div>
                     </div>
 
                     <div class="col-md-3 position-relative">
                         <label class="form-label text-muted fw-bold"><?php echo $translator->get('destination'); ?></label>
-                        <input type="text" id="dest_input" class="form-control form-control-lg" placeholder="<?php echo $translator->get('ph_dest'); ?>" value="<?php echo isset($_GET['destination']) ? htmlspecialchars($_GET['destination']) : ''; ?>" onkeyup="searchPlaces(this.value, 'dest_results', 'dest_code')" autocomplete="off" required>
+                        <input type="text" id="dest_input" class="form-control form-control-lg" placeholder="<?php echo $translator->get('ph_dest'); ?>" value="<?php echo $destDisplay; ?>" onkeyup="searchPlaces(this.value, 'dest_results', 'dest_code')" autocomplete="off" required>
                         <input type="hidden" name="destination" id="dest_code" value="<?php echo isset($_GET['destination']) ? htmlspecialchars($_GET['destination']) : ''; ?>">
                         <div id="dest_results" class="autocomplete-results position-absolute w-100 bg-white shadow-sm border rounded mt-1" style="z-index: 1050; display: none; max-height: 250px; overflow-y: auto;"></div>
                     </div>
@@ -125,7 +150,7 @@ if (isset($_GET['destination']) && !empty($_GET['destination'])) {
                         echo '              <h6 class="text-secondary mb-3">' . htmlspecialchars($iata) . '</h6>';
                         echo '              <p class="card-text text-muted small mb-4">' . htmlspecialchars($airportData['airport_name']) . '</p>';
                         echo '          </div>';
-                        echo '          <a href="index.php?trip_type=one_way&destination=' . htmlspecialchars($iata) . '" class="btn btn-copper w-100 fw-bold shadow-sm" style="border-radius: 8px;">' . $translator->get('find_button') . '</a>';
+                        echo '          <button type="button" onclick="selectTrending(\'' . addslashes(htmlspecialchars($airportData['city_name'])) . '\', \'' . htmlspecialchars($iata) . '\')" class="btn btn-copper w-100 fw-bold shadow-sm" style="border-radius: 8px;">' . $translator->get('find_button') . '</button>';
                         echo '      </div></div></div>';
                     } else {
                         echo '<div class="col-md-4 col-sm-6 mb-4">';
@@ -134,7 +159,7 @@ if (isset($_GET['destination']) && !empty($_GET['destination'])) {
                         echo '          <div class="mb-auto d-flex align-items-center justify-content-center" style="min-height: 100px;">';
                         echo '              <h2 class="card-title fw-bold mb-0" style="color: var(--travel-blue); letter-spacing: 2px;">' . htmlspecialchars($iata) . '</h2>';
                         echo '          </div>';
-                        echo '          <a href="index.php?trip_type=one_way&destination=' . htmlspecialchars($iata) . '" class="btn btn-copper w-100 fw-bold shadow-sm" style="border-radius: 8px;">' . $translator->get('find_button') . '</a>';
+                        echo '          <button type="button" onclick="selectTrending(\'' . htmlspecialchars($iata) . '\', \'' . htmlspecialchars($iata) . '\')" class="btn btn-copper w-100 fw-bold shadow-sm" style="border-radius: 8px;">' . $translator->get('find_button') . '</button>';
                         echo '      </div></div></div>';
                     }
                 }
